@@ -1,4 +1,4 @@
-gsap.registerPlugin(ScrollTrigger);
+/* gsap.registerPlugin(ScrollTrigger);
 window.addEventListener('load', () => {
 	window.scrollTo(0, 0);
 	setTimeout(() => {
@@ -71,8 +71,93 @@ window.addEventListener('pageshow', (event) => {
 		window.location.reload();
 	}
 });
+ */
+gsap.registerPlugin(ScrollTrigger);
+window.addEventListener('load', () => {
+	window.scrollTo(0, 0);
+	setTimeout(() => {
+		initAnimation();
+	}, 100);
+});
+function initAnimation() {
+	ScrollTrigger.getAll().forEach(trigger => trigger.kill());
+	
+	// Responsive values based on screen size
+	const isMobile = window.innerWidth <= 768;
+	const initialTextY = isMobile ? "-120%" : "-170%";
+	const initialProductsY = isMobile ? "100%" : "150%";
+	const exitProductsY = isMobile ? "-100%" : "-150%";
+	const scrollDistance = isMobile ? "+=200%" : "+=400%";
+	
+	gsap.set(".text-img", {
+		y: initialTextY,
+		scale: 0.5
+	});
+	gsap.set(".products-img", {
+		y: initialProductsY
+	});
+	
+	const tl = gsap.timeline({
+		scrollTrigger: {
+			trigger: ".domty-section",
+			start: "top top",
+			end: scrollDistance, // Shorter on mobile
+			scrub: 1,
+			pin: true,
+			anticipatePin: 1,
+			markers: false,
+			invalidateOnRefresh: true,
+			onRefresh: () => {
+				gsap.set(".text-img", {
+					y: initialTextY,
+					scale: 0.5
+				});
+				gsap.set(".products-img", {
+					y: initialProductsY
+				});
+			}
+		}
+	});
+	
+	tl.to(".text-img", {
+		y: "0%",
+		scale: 1,
+		duration: 1,
+		ease: "power2.out"
+	})
+		.to(".products-img", {
+			y: "0%",
+			duration: 1,
+			ease: "power2.out"
+		}, "+=0.3")
+		.to(".text-img", {
+			scale: 0.6,
+			duration: 1,
+			ease: "power2.inOut"
+		}, "<")
+		.to(".products-img", {
+			y: exitProductsY,
+			duration: 1,
+			ease: "power2.in"
+		}, "+=0.3")
+		.to(".text-img", {
+			scale: 1,
+			duration: 1,
+			ease: "power2.inOut"
+		}, "<")
+		.to({}, { duration: 0.5 });
+	
+	ScrollTrigger.refresh();
+}
 
-
+// Re-initialize on resize
+let resizeTimer;
+window.addEventListener('resize', () => {
+	clearTimeout(resizeTimer);
+	resizeTimer = setTimeout(() => {
+		initAnimation();
+	}, 250);
+});
 
 
 
