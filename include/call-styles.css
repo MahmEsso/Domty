@@ -23,7 +23,7 @@ a:hover, a:active, a:focus{text-decoration:none;color:var(--light-blue);}
 .nav-con{/* position:sticky;*/margin:0 0 24px;transition:.3s;background:var(--blue);padding:20px;border-radius:24px;}
 .navbar-brand{margin-top:5px;margin-bottom:6px;padding:0;margin-left:10px;}
 .navbar-brand img{max-height:30px;max-width:100%;transition:all 0.3s ease 0s;}
-.nav-item .nav-link{padding-left:15px;color:#FFF;font-size:22px;font-weight:900;}
+.nav-item .nav-link{padding-left:15px;color:#FFF;font-size: 18px;font-weight:900;}
 .navbar-nav .nav-link.active, .navbar-nav .nav-link.show{background-color:#FFF;color:var(--blue);border-radius:12px;}
 .nav-item.active a{color:#FFF;}
 .dropdown-item:focus, .dropdown-item:hover{background-color:#FFF;color:var(--blue);}
