@@ -21,7 +21,7 @@
   <script src="include/js/wow.min.js"></script>
   <script>new WOW().init();</script>
 </head>
-<body>
+<body class="inner-body">
 <div class="hero wow fadeIn">
   <div class="container">
     <div id="main_navbar" class="nav-con">
@@ -34,10 +34,10 @@
             </button>
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
               <ul class="navbar-nav mb-2 mb-lg-0"><!-- me-auto -->
-                <li class="nav-item"><a class="nav-link active" href="#">Home</a></li>
+                <li class="nav-item"><a class="nav-link" href="#">Home</a></li>
                 <li class="nav-item"><a class="nav-link" href="#">About us</a></li>
                 <li class="nav-item dropdown">
-                  <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Products</a>
+                  <a class="nav-link dropdown-toggle active" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Products</a>
                   <ul class="dropdown-menu">
                     <li><a class="dropdown-item" href="#">Cheese</a></li>
                     <li><a class="dropdown-item" href="#">Juice</a></li>
@@ -80,297 +80,204 @@
       </div>
     </div>
   </div>
-  <div class="slider-con">
-    <div class="container-xl">
-      <div class="row">
-        <div class="col-12">
-          <div id="carouselExampleIndicators" class="carousel slide carousel-fade">
-            <div class="carousel-indicators">
-              <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="bg-styles active" aria-current="true" aria-label="Slide 1"></button>
-              <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1" class="bg-styles" aria-label="Slide 2"></button>
-              <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="2" class="bg-styles" aria-label="Slide 3"></button>
-            </div>
-            <div class="carousel-inner">
-              <div class="carousel-item active"><img src="images/slide1.jpg" alt=""></div>
-              <div class="carousel-item">
-                <video class="d-block w-100" muted loop playsinline>
-                  <source src="images/video1.mp4" type="video/mp4">
-                </video>
-              </div>
-              <div class="carousel-item">
-                <video class="d-block w-100" muted loop playsinline>
-                  <source src="images/video2.mp4" type="video/mp4">
-                </video>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
 </div>
-<section class="welcome">
-  <div class="container">
-    <div class="row justify-content-center">
-      <div class="col-xl-9">
-        <div class="section-head wow fadeInDown">
-          <div class="sub-title">Welcome to Domty</div>
-          <div class="title">Established in 1990,<br>the Arabian Food Industries Company (Domty)</div>
-        </div>
-      </div>
-    </div>
-    <div class="row justify-content-center">
-      <div class="col-lg-12">
-        <div class="welcome-grid wow fadeInUp">
-          <div class="div1 valign-baseline">
-            <div class="welcome-box">
-              <div class="welcome-txt">Manufactures markets and distributes a range of branded white and processed cheeses and juice products.</div>
-              <div class="welcome-img"><img src="images/welcome-left.jpg" class="img-fluid" alt=""></div>
-            </div>
-          </div>
-          <div class="div2 valign-baseline">
-            <div class="welcome-box">
-              <div class="welcome-img"><img src="images/welcome-right.jpg" class="img-fluid" alt=""></div>
-              <div class="welcome-txt">With a portfolio of nearly 200 SKUs. The company is a household name in Egypt with a number-one market position in the local cheese market and a growing market share in the juice segment.</div>
-              <div class="welcome-btn text-start w-100"><a href="#" class="domty-btn">Read More <span><i class="fa-solid fa-chevron-right"></i></span></a></div>
-            </div>
-          </div>
-          <div class="div3 valign-baseline">
-            <div class="welcome-box">
-              <div class="welcome-label"><img src="images/welcome-label.png" alt=""></div>
-              <div class="welcome-img text-center"><img src="images/welcome-center.jpg" class="welcome-center-img" alt=""></div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-<div class="marquee-container">
-  <div id="marquee1" class="marquee-content">
-    <span class="marquee-text">You just say Domty. <img src="images/marquee1.png" alt=""> You just say Domty. <img src="images/marquee2.png" alt=""> You just say Domty. <img src="images/marquee3.png" alt=""> </span>
-  </div>
-</div>
-<section class="products">
-  <div class="container">
-    <div class="row">
-      <div class="col-lg-12">
-        <div class="section-head">
-          <div class="sub-title wow fadeInUp">Products Categories</div>
-          <div class="title wow fadeInDown">Our Products</div>
-        </div>
-      </div>
-    </div>
-  </div>
-  <div class="container-fluid g-0">
-    <div class="row g-0">
-      <div class="col-12 g-0">
-        <div class="products-carousel owl-carousel owl-theme">
-          <div class="product-box">
-            <div class="product-img"><img src="images/product-category1.png" class="mw-100" alt=""></div>
-            <div class="product-info">
-              <div class="product-title">Bakery</div>
-              <div class="product-count">15 Products</div>
-              <a href="#" class="domty-btn">See Products <span><i class="fa-solid fa-chevron-right"></i></span></a>
-            </div>
-          </div>
-          <div class="product-box">
-            <div class="product-img"><img src="images/product-category2.png" class="mw-100" alt=""></div>
-            <div class="product-info">
-              <div class="product-title">Bakery</div>
-              <div class="product-count">15 Products</div>
-              <a href="#" class="domty-btn">See Products <span><i class="fa-solid fa-chevron-right"></i></span></a>
-            </div>
-          </div>
-          <div class="product-box">
-            <div class="product-img"><img src="images/product-category3.png" class="mw-100" alt=""></div>
-            <div class="product-info">
-              <div class="product-title">Bakery</div>
-              <div class="product-count">15 Products</div>
-              <a href="#" class="domty-btn">See Products <span><i class="fa-solid fa-chevron-right"></i></span></a>
-            </div>
-          </div>
-          <div class="product-box">
-            <div class="product-img"><img src="images/product-category1.png" class="mw-100" alt=""></div>
-            <div class="product-info">
-              <div class="product-title">Bakery</div>
-              <div class="product-count">15 Products</div>
-              <a href="#" class="domty-btn">See Products <span><i class="fa-solid fa-chevron-right"></i></span></a>
-            </div>
-          </div>
-          <div class="product-box">
-            <div class="product-img"><img src="images/product-category2.png" class="mw-100" alt=""></div>
-            <div class="product-info">
-              <div class="product-title">Bakery</div>
-              <div class="product-count">15 Products</div>
-              <a href="#" class="domty-btn">See Products <span><i class="fa-solid fa-chevron-right"></i></span></a>
-            </div>
-          </div>
-          <div class="product-box">
-            <div class="product-img"><img src="images/product-category3.png" class="mw-100" alt=""></div>
-            <div class="product-info">
-              <div class="product-title">Bakery</div>
-              <div class="product-count">15 Products</div>
-              <a href="#" class="domty-btn">See Products <span><i class="fa-solid fa-chevron-right"></i></span></a>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-<section class="quick-links">
-  <div class="container-fluid g-0">
-    <div class="row g-0">
-      <div class="col-lg-12 g-0">
-        <div class="section-head">
-          <div class="title text-start wow fadeInRight">Quick Links</div>
-        </div>
-      </div>
-    </div>
-    <div class="row g-0">
-      <div class="col-lg-12 g-0">
-        <div class="quick-links-carousel owl-carousel owl-theme wow fadeInUp">
-          <div class="quick-link-box">
-            <div class="quick-link-img"><a href="#"><img src="images/quick-link1.jpg" class="mw-100" alt=""></a></div>
-            <div class="quick-link-info">
-              <a href="#" class="quick-link-title">Media</a>
-            </div>
-          </div>
-          <div class="quick-link-box">
-            <div class="quick-link-img"><a href="#"><img src="images/quick-link2.jpg" class="mw-100" alt=""></a></div>
-            <div class="quick-link-info">
-              <a href="#" class="quick-link-title">Sustainability</a>
-            </div>
-          </div>
-          <div class="quick-link-box">
-            <div class="quick-link-img"><a href="#"><img src="images/quick-link3.jpg" class="mw-100" alt=""></a></div>
-            <div class="quick-link-info">
-              <a href="#" class="quick-link-title">Recipe</a>
-            </div>
-          </div>
-          <div class="quick-link-box">
-            <div class="quick-link-img"><a href="#"><img src="images/quick-link4.jpg" class="mw-100" alt=""></a></div>
-            <div class="quick-link-info">
-              <a href="#" class="quick-link-title">Investors</a>
-            </div>
-          </div>
-          <div class="quick-link-box">
-            <div class="quick-link-img"><a href="#"><img src="images/quick-link1.jpg" class="mw-100" alt=""></a></div>
-            <div class="quick-link-info">
-              <a href="#" class="quick-link-title">Media</a>
-            </div>
-          </div>
-          <div class="quick-link-box">
-            <div class="quick-link-img"><a href="#"><img src="images/quick-link2.jpg" class="mw-100" alt=""></a></div>
-            <div class="quick-link-info">
-              <a href="#" class="quick-link-title">Sustainability</a>
-            </div>
-          </div>
-          <div class="quick-link-box">
-            <div class="quick-link-img"><a href="#"><img src="images/quick-link3.jpg" class="mw-100" alt=""></a></div>
-            <div class="quick-link-info">
-              <a href="#" class="quick-link-title">Recipe</a>
-            </div>
-          </div>
-          <div class="quick-link-box">
-            <div class="quick-link-img"><a href="#"><img src="images/quick-link4.jpg" class="mw-100" alt=""></a></div>
-            <div class="quick-link-info">
-              <a href="#" class="quick-link-title">Investors</a>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<section class="domty-section">
-  <img src="images/animation-section-txt.png" class="text-img" />
-  <img src="images/animation-section-products.png" class="products-img" />
-</section>
-
-
-
-<section class="events">
-  <div class="container">
-    <div class="row">
-      <div class="col-lg-12">
-        <div class="section-head">
-          <div class="sub-title wow fadeInUp">What’s News</div>
-          <div class="title wow fadeInDown">LatestEvents</div>
-        </div>
-      </div>
-    </div>
-  </div>
+<section class="page-header">
   <div class="container">
     <div class="row">
       <div class="col-12">
-        <div class="vertical-accordion wow fadeInUp">
-          <!-- First Section -->
-          <div class="accordion-section active" data-section="1">
-            <div class="accordion-tab">
-              <div class="tab-text">Domty collaborates with Fawry FMCG</div>
-            </div>
-            <div class="accordion-content">
-              <div class="content-image">
-                <img src="images/news1.jpg" alt="Team Meeting">
-              </div>
-              <div class="content-text">
-                <div class="content-info">
-                  <div class="date-badge">8 Nov 2023</div>
-                  <h3 class="content-title">Domty collaborates with Fawry FMCG</h3>
-                  <p class="content-description">Domty collaborates with Fawry FMCG to enhance digital financial services solutions and financial inclusion.</p>
-                </div>
-                <div class="welcome-btn text-start w-100"><a href="#" class="domty-btn">Read More <span><i class="fa-solid fa-chevron-right"></i></span></a></div>
-              </div>
-            </div>
-          </div>
-
-          <!-- Second Section -->
-          <div class="accordion-section collapsed" data-section="2">
-            <div class="accordion-tab">
-              <div class="tab-text">Domty in food AFRICA 2019</div>
-            </div>
-            <div class="accordion-content">
-              <div class="content-image">
-                <img src="images/news1.jpg" alt="Collaboration">
-              </div>
-              <div class="content-text">
-                <div class="content-info">
-                  <div class="date-badge">15 Oct 2023</div>
-                  <h3 class="content-title">Domty in food AFRICA 2019</h3>
-                  <p class="content-description">Domty collaborates with Fawry FMCG to enhance digital financial services solutions and financial inclusion.</p>
-                </div>
-                <div class="welcome-btn text-start w-100"><a href="#" class="domty-btn">Read More <span><i class="fa-solid fa-chevron-right"></i></span></a></div>
-              </div>
-            </div>
-          </div>
-
-          <!-- Third Section -->
-          <div class="accordion-section collapsed" data-section="3">
-            <div class="accordion-tab">
-              <div class="tab-text">Domty collab with fawry</div>
-            </div>
-            <div class="accordion-content">
-              <div class="content-image">
-                <img src="images/news1.jpg" alt="Innovation">
-              </div>
-              <div class="content-text">
-                <div class="content-info">
-                  <div class="date-badge">20 Sep 2023</div>
-                  <h3 class="content-title">Domty collab with fawry</h3>
-                  <p class="content-description">Domty collaborates with Fawry FMCG to enhance digital financial services solutions and financial inclusion.</p>
-                </div>
-                <div class="welcome-btn text-start w-100"><a href="#" class="domty-btn">Read More <span><i class="fa-solid fa-chevron-right"></i></span></a></div>
-              </div>
-            </div>
-          </div>
+        <div class="page-header-content">
+          <img src="images/bakery-header-img.jpg" class="w-100" alt="">
         </div>
       </div>
     </div>
   </div>
 </section>
+<section class="products-filter-section">
+  <div class="container">
+        <div class="row">
+      <div class="col-12">
+        <div class="filter-con wow fadeInUp">
+          <!-- Portfolio jm Holland -->
+          <div class="container text-center">
+
+            <ul class="products-menu">
+              <li class="current" data-target="all"><span>All Products</span></li>
+              <li data-target="bread"><span>Bread</span></li>
+              <li data-target="toast"><span>Toast</span></li>
+              <li data-target="bites"><span>Bites</span></li>
+              <li data-target="double"><span>Double</span></li>
+              <li data-target="croissant"><span>Croissant</span></li>
+            </ul>
+
+            <div class="row products-item">
+              <div class="cards" data-item="bread">
+                <div class="product-box">
+                  <div class="product-img"><img src="images/bread1.png" class="mw-100" alt=""></div>
+                  <div class="product-info">
+                    <div class="product-title">Focaccia Bread</div>
+                    <a href="product-details.html" class="domty-btn">View Details <span><i class="fa-solid fa-chevron-right"></i></span></a>
+                  </div>
+                </div>
+              </div>
+              <div class="cards" data-item="toast">
+                <div class="product-box">
+                  <div class="product-img"><img src="images/bread2.png" class="mw-100" alt=""></div>
+                  <div class="product-info">
+                    <div class="product-title">Fino Bread Plain</div>
+                    <a href="product-details.html" class="domty-btn">View Details <span><i class="fa-solid fa-chevron-right"></i></span></a>
+                  </div>
+                </div>
+              </div>
+              <div class="cards" data-item="bites">
+                <div class="product-box">
+                  <div class="product-img"><img src="images/bread3.png" class="mw-100" alt=""></div>
+                  <div class="product-info">
+                    <div class="product-title">Fino Bread With Thyme</div>
+                    <a href="product-details.html" class="domty-btn">View Details <span><i class="fa-solid fa-chevron-right"></i></span></a>
+                  </div>
+                </div>
+              </div>
+              <div class="cards" data-item="toast">
+                <div class="product-box">
+                  <div class="product-img"><img src="images/bread4.png" class="mw-100" alt=""></div>
+                  <div class="product-info">
+                    <div class="product-title">Petit Pain Plan Bread</div>
+                    <a href="product-details.html" class="domty-btn">View Details <span><i class="fa-solid fa-chevron-right"></i></span></a>
+                  </div>
+                </div>
+              </div>
+              <div class="cards" data-item="bread">
+                <div class="product-box">
+                  <div class="product-img"><img src="images/bread1.png" class="mw-100" alt=""></div>
+                  <div class="product-info">
+                    <div class="product-title">Focaccia Bread</div>
+                    <a href="product-details.html" class="domty-btn">View Details <span><i class="fa-solid fa-chevron-right"></i></span></a>
+                  </div>
+                </div>
+              </div>
+              <div class="cards" data-item="bites">
+                <div class="product-box">
+                  <div class="product-img"><img src="images/bread2.png" class="mw-100" alt=""></div>
+                  <div class="product-info">
+                    <div class="product-title">Fino Bread Plain</div>
+                    <a href="product-details.html" class="domty-btn">View Details <span><i class="fa-solid fa-chevron-right"></i></span></a>
+                  </div>
+                </div>
+              </div>
+              <div class="cards" data-item="toast">
+                <div class="product-box">
+                  <div class="product-img"><img src="images/bread3.png" class="mw-100" alt=""></div>
+                  <div class="product-info">
+                    <div class="product-title">Fino Bread With Thyme</div>
+                    <a href="product-details.html" class="domty-btn">View Details <span><i class="fa-solid fa-chevron-right"></i></span></a>
+                  </div>
+                </div>
+              </div>
+              <div class="cards" data-item="bread">
+                <div class="product-box">
+                  <div class="product-img"><img src="images/bread4.png" class="mw-100" alt=""></div>
+                  <div class="product-info">
+                    <div class="product-title">Petit Pain Plan Bread</div>
+                    <a href="product-details.html" class="domty-btn">View Details <span><i class="fa-solid fa-chevron-right"></i></span></a>
+                  </div>
+                </div>
+              </div>
+              <div class="cards" data-item="double">
+                <div class="product-box">
+                  <div class="product-img"><img src="images/bread1.png" class="mw-100" alt=""></div>
+                  <div class="product-info">
+                    <div class="product-title">Focaccia Bread</div>
+                    <a href="product-details.html" class="domty-btn">View Details <span><i class="fa-solid fa-chevron-right"></i></span></a>
+                  </div>
+                </div>
+              </div>
+
+              <div class="cards" data-item="croissant">
+                <div class="product-box">
+                  <div class="product-img"><img src="images/bread1.png" class="mw-100" alt=""></div>
+                  <div class="product-info">
+                    <div class="product-title">Focaccia Bread</div>
+                    <a href="product-details.html" class="domty-btn">View Details <span><i class="fa-solid fa-chevron-right"></i></span></a>
+                  </div>
+                </div>
+              </div>
+              <div class="cards" data-item="toast">
+                <div class="product-box">
+                  <div class="product-img"><img src="images/bread2.png" class="mw-100" alt=""></div>
+                  <div class="product-info">
+                    <div class="product-title">Fino Bread Plain</div>
+                    <a href="product-details.html" class="domty-btn">View Details <span><i class="fa-solid fa-chevron-right"></i></span></a>
+                  </div>
+                </div>
+              </div>
+              <div class="cards" data-item="bites">
+                <div class="product-box">
+                  <div class="product-img"><img src="images/bread3.png" class="mw-100" alt=""></div>
+                  <div class="product-info">
+                    <div class="product-title">Fino Bread With Thyme</div>
+                    <a href="product-details.html" class="domty-btn">View Details <span><i class="fa-solid fa-chevron-right"></i></span></a>
+                  </div>
+                </div>
+              </div>
+              <div class="cards" data-item="toast">
+                <div class="product-box">
+                  <div class="product-img"><img src="images/bread4.png" class="mw-100" alt=""></div>
+                  <div class="product-info">
+                    <div class="product-title">Petit Pain Plan Bread</div>
+                    <a href="product-details.html" class="domty-btn">View Details <span><i class="fa-solid fa-chevron-right"></i></span></a>
+                  </div>
+                </div>
+              </div>
+              <div class="cards" data-item="croissant">
+                <div class="product-box">
+                  <div class="product-img"><img src="images/bread1.png" class="mw-100" alt=""></div>
+                  <div class="product-info">
+                    <div class="product-title">Focaccia Bread</div>
+                    <a href="product-details.html" class="domty-btn">View Details <span><i class="fa-solid fa-chevron-right"></i></span></a>
+                  </div>
+                </div>
+              </div>
+              <div class="cards" data-item="bites">
+                <div class="product-box">
+                  <div class="product-img"><img src="images/bread2.png" class="mw-100" alt=""></div>
+                  <div class="product-info">
+                    <div class="product-title">Fino Bread Plain</div>
+                    <a href="product-details.html" class="domty-btn">View Details <span><i class="fa-solid fa-chevron-right"></i></span></a>
+                  </div>
+                </div>
+              </div>
+              <div class="cards" data-item="toast">
+                <div class="product-box">
+                  <div class="product-img"><img src="images/bread3.png" class="mw-100" alt=""></div>
+                  <div class="product-info">
+                    <div class="product-title">Fino Bread With Thyme</div>
+                    <a href="product-details.html" class="domty-btn">View Details <span><i class="fa-solid fa-chevron-right"></i></span></a>
+                  </div>
+                </div>
+              </div>
+              <div class="cards" data-item="croissant">
+                <div class="product-box">
+                  <div class="product-img"><img src="images/bread4.png" class="mw-100" alt=""></div>
+                  <div class="product-info">
+                    <div class="product-title">Petit Pain Plan Bread</div>
+                    <a href="product-details.html" class="domty-btn">View Details <span><i class="fa-solid fa-chevron-right"></i></span></a>
+                  </div>
+                </div>
+              </div>
+
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+
+
+
 <footer>
   <div class="container-xl">
     <div class="row">
