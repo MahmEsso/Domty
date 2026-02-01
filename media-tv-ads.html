@@ -265,13 +265,26 @@
 
 <script src="include/js/fancybox.js"></script>
 <script>
-  Fancybox.bind("[data-fancybox]", {
-    // Your custom options
-  });
-</script>
-
-
-<script>
+Fancybox.bind("[data-fancybox]", {
+  Carousel: {
+    Toolbar: {
+      display: {
+        left: ["counter"],
+        middle: [
+          "zoomIn",
+          "zoomOut",
+          "toggle1to1",
+          "rotateCCW",
+          "rotateCW",
+          "flipX",
+          "flipY",
+          "reset",
+        ],
+        right: ["autoplay", "thumbs", "close"],
+      },
+    },
+  },
+});
 </script>
 
 
