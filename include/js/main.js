@@ -347,6 +347,7 @@
 			autoplayHoverPause: true,
 			autoplay: true,
 			nav: true,
+			autoplayTimeout: 2000,
 			navText: ["<i class='fa-solid fa-chevron-left'></i>", "<i class='fa-solid fa-chevron-right'></i>"],
 			responsive: {
 				0: { items: 1 },
@@ -527,6 +528,7 @@
 
 })();
 
+// Script 11: Vertical Carousel
 (function () {
 	'use strict';
 
@@ -649,4 +651,41 @@
 	document.addEventListener('DOMContentLoaded', () => {
 	new VerticalCarousel();
 	});
+})();
+
+
+(function () {
+	'use strict';
+
+document.addEventListener('DOMContentLoaded', function() {
+  const dropupToggles = document.querySelectorAll('.dropup-toggle');
+  
+  dropupToggles.forEach(toggle => {
+    toggle.addEventListener('click', function(e) {
+      e.preventDefault();
+      
+      const dropupMenu = this.nextElementSibling;
+      const parentLi = this.closest('.dropup');
+      
+      // Close other open dropups
+      document.querySelectorAll('.dropup').forEach(item => {
+        if (item !== parentLi) {
+          item.classList.remove('active');
+        }
+      });
+      
+      // Toggle current dropup
+      parentLi.classList.toggle('active');
+    });
+  });
+  
+  // Close dropup when clicking outside
+  document.addEventListener('click', function(e) {
+    if (!e.target.closest('.dropup')) {
+      document.querySelectorAll('.dropup').forEach(item => {
+        item.classList.remove('active');
+      });
+    }
+  });
+});
 })();
