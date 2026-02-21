@@ -65,6 +65,121 @@
 
 // Script 2: GSAP ScrollTrigger Animation
 (function () {
+    'use strict';
+
+    gsap.registerPlugin(ScrollTrigger);
+
+    let tl = null;
+    let st = null;
+
+    // Disable Chrome scroll restoration entirely —
+    // we'll handle scroll position manually
+    if ('scrollRestoration' in history) {
+        history.scrollRestoration = 'manual';
+    }
+
+    window.addEventListener('load', () => {
+        window.scrollTo(0, 0);
+        setTimeout(initAnimation, 300); // slightly longer delay to let
+                                        // owl carousel & wow.js settle
+    });
+
+    function getValues() {
+        const isMobile = window.innerWidth <= 768;
+        return {
+            initialTextY:     isMobile ? "-75vh" : "-70vh",
+            initialProductsY: isMobile ? "100vh"  : "150vh",
+            exitProductsY:    isMobile ? "-50vh"  : "-150vh",
+            scrollDistance:   isMobile ? "+=900vh" : "+=2000vh",
+        };
+    }
+
+    function setInitialState(v) {
+        gsap.set(".text-img",     { y: v.initialTextY, scale: 0.5 });
+        gsap.set(".products-img", { y: v.initialProductsY });
+    }
+
+    function buildTimeline(v) {
+        const t = gsap.timeline({ paused: true });
+
+        t.to(".text-img", {
+                y: "0vh", scale: 1,
+                duration: 1, ease: "power2.out"
+            })
+            .to(".products-img", {
+                y: "0vh",
+                duration: 1, ease: "power2.out"
+            }, "+=0.3")
+            .to(".text-img", {
+                scale: 0.6,
+                duration: 1, ease: "power2.inOut"
+            }, "<")
+            .to(".products-img", {
+                y: v.exitProductsY,
+                duration: 1, ease: "power2.in"
+            }, "+=0.3")
+            .to(".text-img", {
+                scale: 1,
+                duration: 1, ease: "power2.inOut"
+            }, "<")
+            .to({}, { duration: 0.5 });
+
+        return t;
+    }
+
+    function initAnimation() {
+        if (st) { st.kill(); st = null; }
+        if (tl) { tl.kill(); tl = null; }
+        gsap.killTweensOf([".text-img", ".products-img"]);
+
+        const v = getValues();
+
+        // Save scroll, jump to 0 so all sections above render
+        // at their natural height before ScrollTrigger measures
+        const savedScroll = window.scrollY;
+        window.scrollTo(0, 0);
+
+        // Wait for the browser to repaint at scroll 0, then measure & build
+        requestAnimationFrame(() => {
+            requestAnimationFrame(() => {
+
+                setInitialState(v);
+                tl = buildTimeline(v);
+
+                st = ScrollTrigger.create({
+                    trigger: ".domty-section",
+                    start: "top top",
+                    end: v.scrollDistance,
+                    scrub: 4,
+                    pin: true,
+                    anticipatePin: 1,
+                    animation: tl,
+                    invalidateOnRefresh: true,
+                });
+
+                // Force a clean measurement from scroll 0
+                ScrollTrigger.refresh();
+
+                // Now restore where the user was
+                // Use another rAF so refresh has fully committed
+                requestAnimationFrame(() => {
+                    window.scrollTo(0, savedScroll);
+                });
+            });
+        });
+    }
+
+    let resizeTimer;
+    window.addEventListener('resize', () => {
+        clearTimeout(resizeTimer);
+        resizeTimer = setTimeout(initAnimation, 250);
+    });
+
+})();
+
+
+
+/* (function () {
 	'use strict';
 
 	gsap.registerPlugin(ScrollTrigger);
@@ -156,7 +271,7 @@
 	});
 
 })();
-
+ */
 
 // Script 3: Carousel Swipe Support
 (function ($) {
