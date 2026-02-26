@@ -65,6 +65,121 @@
 
 // Script 2: GSAP ScrollTrigger Animation
 (function () {
+    'use strict';
+
+    gsap.registerPlugin(ScrollTrigger);
+
+    let tl = null;
+    let st = null;
+
+    // Disable Chrome scroll restoration entirely —
+    // we'll handle scroll position manually
+    if ('scrollRestoration' in history) {
+        history.scrollRestoration = 'manual';
+    }
+
+    window.addEventListener('load', () => {
+        window.scrollTo(0, 0);
+        setTimeout(initAnimation, 300); // slightly longer delay to let
+                                        // owl carousel & wow.js settle
+    });
+
+    function getValues() {
+        const isMobile = window.innerWidth <= 768;
+        return {
+            initialTextY:     isMobile ? "-75vh" : "-70vh",
+            initialProductsY: isMobile ? "100vh"  : "150vh",
+            exitProductsY:    isMobile ? "-50vh"  : "-150vh",
+            scrollDistance:   isMobile ? "+=900vh" : "+=2000vh",
+        };
+    }
+
+    function setInitialState(v) {
+        gsap.set(".text-img",     { y: v.initialTextY, scale: 0.5 });
+        gsap.set(".products-img", { y: v.initialProductsY });
+    }
+
+    function buildTimeline(v) {
+        const t = gsap.timeline({ paused: true });
+
+        t.to(".text-img", {
+                y: "0vh", scale: 1,
+                duration: 1, ease: "power2.out"
+            })
+            .to(".products-img", {
+                y: "0vh",
+                duration: 1, ease: "power2.out"
+            }, "+=0.3")
+            .to(".text-img", {
+                scale: 0.6,
+                duration: 1, ease: "power2.inOut"
+            }, "<")
+            .to(".products-img", {
+                y: v.exitProductsY,
+                duration: 1, ease: "power2.in"
+            }, "+=0.3")
+            .to(".text-img", {
+                scale: 1,
+                duration: 1, ease: "power2.inOut"
+            }, "<")
+            .to({}, { duration: 0.5 });
+
+        return t;
+    }
+
+    function initAnimation() {
+        if (st) { st.kill(); st = null; }
+        if (tl) { tl.kill(); tl = null; }
+        gsap.killTweensOf([".text-img", ".products-img"]);
+
+        const v = getValues();
+
+        // Save scroll, jump to 0 so all sections above render
+        // at their natural height before ScrollTrigger measures
+        const savedScroll = window.scrollY;
+        window.scrollTo(0, 0);
+
+        // Wait for the browser to repaint at scroll 0, then measure & build
+        requestAnimationFrame(() => {
+            requestAnimationFrame(() => {
+
+                setInitialState(v);
+                tl = buildTimeline(v);
+
+                st = ScrollTrigger.create({
+                    trigger: ".domty-section",
+                    start: "top top",
+                    end: v.scrollDistance,
+                    scrub: 4,
+                    pin: true,
+                    anticipatePin: 1,
+                    animation: tl,
+                    invalidateOnRefresh: true,
+                });
+
+                // Force a clean measurement from scroll 0
+                ScrollTrigger.refresh();
+
+                // Now restore where the user was
+                // Use another rAF so refresh has fully committed
+                requestAnimationFrame(() => {
+                    window.scrollTo(0, savedScroll);
+                });
+            });
+        });
+    }
+
+    let resizeTimer;
+    window.addEventListener('resize', () => {
+        clearTimeout(resizeTimer);
+        resizeTimer = setTimeout(initAnimation, 250);
+    });
+
+})();
+
+
+
+/* (function () {
 	'use strict';
 
 	gsap.registerPlugin(ScrollTrigger);
@@ -156,7 +271,7 @@
 	});
 
 })();
-
+ */
 
 // Script 3: Carousel Swipe Support
 (function ($) {
@@ -206,39 +321,30 @@
 
 // Script 5: Fixed Navbar on Scroll
 (function ($) {
-    'use strict';
+	'use strict';
 
-    var $navbar = $('#main_navbar');
-    var $body = $('body');
-    var navHeight = $navbar.offset().top;
-    var navbarHeight = $navbar.outerHeight();
+	var navHeight = $('#main_navbar').offset().top;
+	FixMegaNavbar(navHeight);
+	$(window).bind('scroll', function () { FixMegaNavbar(navHeight); });
 
-    FixMegaNavbar(navHeight);
-    $(window).bind('scroll', function () { FixMegaNavbar(navHeight); });
+	function FixMegaNavbar(navHeight) {
+		if (!$('#main_navbar').hasClass('navbar-fixed-bottom')) {
+			if ($(window).scrollTop() > navHeight) {
+				$('#main_navbar').addClass('navbar-fixed-top')
+				$('#main_navbar').addClass('fixed-bg')
 
-    function FixMegaNavbar(navHeight) {
-        if (!$navbar.hasClass('navbar-fixed-bottom')) {
-            if ($(window).scrollTop() > navHeight) {
-                if (!$navbar.hasClass('navbar-fixed-top')) {
-                    $navbar.addClass('navbar-fixed-top').addClass('fixed-bg');
-                    // Prevent content jump by compensating for navbar height
-                    $body.css('margin-top', navbarHeight + 'px');
-                }
-
-                if ($navbar.parent('div').hasClass('container'))
-                    $navbar.children('div').addClass('container').removeClass('container-fluid');
-                else if ($navbar.parent('div').hasClass('container-fluid'))
-                    $navbar.children('div').addClass('container-fluid').removeClass('container');
-
-            } else {
-                if ($navbar.hasClass('navbar-fixed-top')) {
-                    $navbar.removeClass('navbar-fixed-top').removeClass('fixed-bg');
-                    // Remove compensation only after class is removed
-                    $body.css('margin-top', '');
-                }
-            }
-        }
-    }
+				if ($('#main_navbar').parent('div').hasClass('container'))
+					$('#main_navbar').children('div').addClass('container').removeClass('container-fluid');
+				else if ($('#main_navbar').parent('div').hasClass('container-fluid'))
+					$('#main_navbar').children('div').addClass('container-fluid').removeClass('container');
+			}
+			else {
+				$('#main_navbar').removeClass('navbar-fixed-top');
+				$('#main_navbar').removeClass('fixed-bg')
+				$('body').css({ 'margin-top': '' });
+			}
+		}
+	}
 
 })(jQuery);
 
@@ -539,114 +645,130 @@
 
 // Script 11: Vertical Carousel
 (function () {
-  'use strict';
+	'use strict';
 
-  class VerticalCarousel {
-    constructor() {
-      this.slides = document.querySelectorAll('.slide');
-      this.currentSlide = 0;
-      this.totalSlides = this.slides.length;
-      this.isAutoPlaying = true;
+	class VerticalCarousel {
+	constructor() {
+		this.slides = document.querySelectorAll('.slide');
+		this.currentSlide = 0; // Start with slide 02 active
+		this.totalSlides = this.slides.length;
 
-      this.init();
-    }
+		this.init();
+	}
 
-    init() {
-      this.updateSlides();
-      this.attachEventListeners();
-      this.startAutoPlay();
-    }
+	init() {
+		this.updateSlides();
+		this.attachEventListeners();
+		this.startAutoPlay();
+	}
 
-    updateSlides() {
-      this.slides.forEach(slide => {
-        slide.classList.remove('prev', 'active', 'next');
-      });
+	updateSlides() {
+		// Remove all classes
+		this.slides.forEach(slide => {
+		slide.classList.remove('prev', 'active', 'next');
+		});
 
-      const prevIndex = (this.currentSlide - 1 + this.totalSlides) % this.totalSlides;
-      const nextIndex = (this.currentSlide + 1) % this.totalSlides;
+		// Calculate indices
+		const prevIndex = (this.currentSlide - 1 + this.totalSlides) % this.totalSlides;
+		const nextIndex = (this.currentSlide + 1) % this.totalSlides;
 
-      this.slides[prevIndex].classList.add('prev');
-      this.slides[this.currentSlide].classList.add('active');
-      this.slides[nextIndex].classList.add('next');
-    }
+		// Add classes
+		this.slides[prevIndex].classList.add('prev');
+		this.slides[this.currentSlide].classList.add('active');
+		this.slides[nextIndex].classList.add('next');
+	}
 
-    attachEventListeners() {
-      const prevBtn = document.querySelector('.carousel-btn--prev');
-      const nextBtn = document.querySelector('.carousel-btn--next');
-      const autoPlayBtn = document.querySelector('.carousel-btn--autoplay');
+	attachEventListeners() {
+		this.slides.forEach((slide, index) => {
+		slide.addEventListener('click', () => {
+			if (slide.classList.contains('prev')) {
+			this.prevSlide();
+			} else if (slide.classList.contains('next')) {
+			this.nextSlide();
+			}
+		});
+		});
 
-      if (prevBtn) {
-        prevBtn.addEventListener('click', () => this.prevSlide());
-      }
+		// Scroll wheel support
+		/* const wrapper = document.querySelector('.carousel-wrapper');
+		wrapper.addEventListener('wheel', (e) => {
+		e.preventDefault();
+		if (e.deltaY > 0) {
+			this.nextSlide();
+		} else {
+			this.prevSlide();
+		}
+		}, { passive: false }); */
 
-      if (nextBtn) {
-        nextBtn.addEventListener('click', () => this.nextSlide());
-      }
+		// Keyboard navigation
+		/* document.addEventListener('keydown', (e) => {
+		if (e.key === 'ArrowDown') {
+			e.preventDefault();
+			this.nextSlide();
+		}
+		if (e.key === 'ArrowUp') {
+			e.preventDefault();
+			this.prevSlide();
+		}
+		}); */
 
-      if (autoPlayBtn) {
-        autoPlayBtn.addEventListener('click', () => this.toggleAutoPlay());
-      }
-    }
+		// Touch/swipe support
+		let touchStartY = 0;
+		let touchEndY = 0;
 
-    toggleAutoPlay() {
-      const autoPlayBtn = document.querySelector('.carousel-btn--autoplay');
+		wrapper.addEventListener('touchstart', (e) => {
+		touchStartY = e.changedTouches[0].screenY;
+		});
 
-      if (this.isAutoPlaying) {
-        this.stopAutoPlay();
-        if (autoPlayBtn) autoPlayBtn.innerHTML = '<i class="fa-solid fa-play"></i>';
-      } else {
-        this.startAutoPlay();
-        if (autoPlayBtn) autoPlayBtn.innerHTML = '<i class="fa-solid fa-pause"></i>';
-      }
-    }
+		wrapper.addEventListener('touchend', (e) => {
+		touchEndY = e.changedTouches[0].screenY;
+		this.handleSwipe();
+		});
 
-    goToSlide(index) {
-      if (index === this.currentSlide) return;
+		this.handleSwipe = () => {
+		if (touchEndY < touchStartY - 50) this.nextSlide();
+		if (touchEndY > touchStartY + 50) this.prevSlide();
+		};
+	}
 
-      this.currentSlide = index;
-      this.updateSlides();
+	goToSlide(index) {
+		if (index === this.currentSlide) return;
 
-      if (this.isAutoPlaying) {
-        this.resetAutoPlay();
-      }
-    }
+		this.currentSlide = index;
+		this.updateSlides();
 
-    nextSlide() {
-      const nextIndex = (this.currentSlide + 1) % this.totalSlides;
-      this.goToSlide(nextIndex);
-    }
+		this.resetAutoPlay();
+	}
 
-    prevSlide() {
-      const prevIndex = (this.currentSlide - 1 + this.totalSlides) % this.totalSlides;
-      this.goToSlide(prevIndex);
-    }
+	nextSlide() {
+		const nextIndex = (this.currentSlide + 1) % this.totalSlides;
+		this.goToSlide(nextIndex);
+	}
 
-    startAutoPlay() {
-      this.isAutoPlaying = true;
-      this.autoPlayInterval = setInterval(() => {
-        this.nextSlide();
-      }, 5000);
-    }
+	prevSlide() {
+		const prevIndex = (this.currentSlide - 1 + this.totalSlides) % this.totalSlides;
+		this.goToSlide(prevIndex);
+	}
 
-    stopAutoPlay() {
-      this.isAutoPlaying = false;
-      clearInterval(this.autoPlayInterval);
-    }
+	startAutoPlay() {
+		this.autoPlayInterval = setInterval(() => {
+		this.nextSlide();
+		}, 5000);
+	}
 
-    resetAutoPlay() {
-      clearInterval(this.autoPlayInterval);
-      this.startAutoPlay();
-    }
-  }
+	resetAutoPlay() {
+		clearInterval(this.autoPlayInterval);
+		this.startAutoPlay();
+	}
+	}
 
-  document.addEventListener('DOMContentLoaded', () => {
-    new VerticalCarousel();
-  });
+	// Initialize carousel when DOM is loaded
+	document.addEventListener('DOMContentLoaded', () => {
+	new VerticalCarousel();
+	});
 })();
 
 
-
-// Script 12: Social Media Dropup Menu
 (function () {
 	'use strict';
 
@@ -681,24 +803,4 @@ document.addEventListener('DOMContentLoaded', function() {
     }
   });
 });
-})();
-
-
-
-// Script 13: Dropdown Hover
-(function () {
-	'use strict';
-
-	$('.dropdown').hover(
-		function() {
-			$(this).find('.dropdown-menu').stop(true, true).fadeIn(150);
-			$(this).addClass('show');
-			$(this).find('.dropdown-toggle').attr('aria-expanded', true);
-		},
-		function() {
-			$(this).find('.dropdown-menu').stop(true, true).fadeOut(150);
-			$(this).removeClass('show');
-			$(this).find('.dropdown-toggle').attr('aria-expanded', false);
-		}
-	);
 })();
