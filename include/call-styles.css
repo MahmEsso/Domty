@@ -237,7 +237,7 @@ a:not([href]):not([class]):hover{color:var(--blue);}
 .sub-filter-item {z-index:10000;background-color: var(--blue);font-size:20px;line-height:48px;border:none;color:#FFF;border-radius:8px;padding: 10px 20px;line-height: 1;}
 .sub-filter-item.current {background: var(--light-blue);color: white;border-color: var(--light-blue);} */
 
-.sub-filter-menu{display:flex;gap:10px;margin:-38px 0 0 0;flex-wrap:wrap;overflow:hidden;max-height:0;opacity:0;transform:translateY(-10px);transition:all .3s ease-in-out}
+.sub-filter-menu{display:flex;justify-content: center;gap:10px;margin:-38px 0 0 0;flex-wrap:wrap;overflow:hidden;max-height:0;opacity:0;transform:translateY(-10px);transition:all .3s ease-in-out}
 .sub-filter-menu.show{max-height:200px;opacity:1;transform:translateY(0)}
 .sub-filter-menu.hide{max-height:0;opacity:0;transform:translateY(-10px)}
 .sub-filter-item{z-index:10000;background-color:var(--blue);font-size:14px;line-height:48px;border:none;color:#FFF;border-radius:8px;padding:10px 20px;line-height:1;transition:all .2s ease;animation:slideInButton .3s ease forwards}
