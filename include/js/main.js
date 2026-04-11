@@ -61,28 +61,26 @@
 
 })(jQuery);
 
-
-
 // Script 2: GSAP ScrollTrigger Animation
 // 
 (function () {
     'use strict';
+
+    // Exit early if the section doesn't exist on this page
+    if (!document.querySelector('section.domty-section')) return;
 
     gsap.registerPlugin(ScrollTrigger);
 
     let tl = null;
     let st = null;
 
-    // Disable Chrome scroll restoration entirely —
-    // we'll handle scroll position manually
     if ('scrollRestoration' in history) {
         history.scrollRestoration = 'manual';
     }
 
     window.addEventListener('load', () => {
         window.scrollTo(0, 0);
-        setTimeout(initAnimation, 300); // slightly longer delay to let
-                                        // owl carousel & wow.js settle
+        setTimeout(initAnimation, 300);
     });
 
     function getValues() {
@@ -135,12 +133,9 @@
 
         const v = getValues();
 
-        // Save scroll, jump to 0 so all sections above render
-        // at their natural height before ScrollTrigger measures
         const savedScroll = window.scrollY;
         window.scrollTo(0, 0);
 
-        // Wait for the browser to repaint at scroll 0, then measure & build
         requestAnimationFrame(() => {
             requestAnimationFrame(() => {
 
@@ -158,11 +153,8 @@
                     invalidateOnRefresh: true,
                 });
 
-                // Force a clean measurement from scroll 0
                 ScrollTrigger.refresh();
 
-                // Now restore where the user was
-                // Use another rAF so refresh has fully committed
                 requestAnimationFrame(() => {
                     window.scrollTo(0, savedScroll);
                 });
@@ -177,99 +169,6 @@
     });
 
 })();
-/*(function () {
-	'use strict';
-
-	gsap.registerPlugin(ScrollTrigger);
-	window.addEventListener('load', () => {
-		window.scrollTo(0, 0);
-		setTimeout(() => {
-			initAnimation();
-		}, 100);
-	});
-
-	function initAnimation() {
-		ScrollTrigger.getAll().forEach(trigger => trigger.kill());
-
-		// Responsive values based on screen size
-		const isMobile = window.innerWidth <= 768;
-		const initialTextY = isMobile ? "-120%" : "-170%";
-		const initialProductsY = isMobile ? "100%" : "150%";
-		const exitProductsY = isMobile ? "-100%" : "-150%";
-		const scrollDistance = isMobile ? "+=200%" : "+=400%";
-
-		gsap.set(".text-img", {
-			y: initialTextY,
-			scale: 0.5
-		});
-		gsap.set(".products-img", {
-			y: initialProductsY
-		});
-
-		const tl = gsap.timeline({
-			scrollTrigger: {
-				trigger: ".domty-section",
-				start: "top top",
-				end: scrollDistance,
-				scrub: 1,
-				pin: true,
-				anticipatePin: 1,
-				markers: false,
-				invalidateOnRefresh: true,
-				onRefresh: () => {
-					gsap.set(".text-img", {
-						y: initialTextY,
-						scale: 0.5
-					});
-					gsap.set(".products-img", {
-						y: initialProductsY
-					});
-				}
-			}
-		});
-
-		tl.to(".text-img", {
-			y: "0%",
-			scale: 1,
-			duration: 1,
-			ease: "power2.out"
-		})
-			.to(".products-img", {
-				y: "0%",
-				duration: 1,
-				ease: "power2.out"
-			}, "+=0.3")
-			.to(".text-img", {
-				scale: 0.6,
-				duration: 1,
-				ease: "power2.inOut"
-			}, "<")
-			.to(".products-img", {
-				y: exitProductsY,
-				duration: 1,
-				ease: "power2.in"
-			}, "+=0.3")
-			.to(".text-img", {
-				scale: 1,
-				duration: 1,
-				ease: "power2.inOut"
-			}, "<")
-			.to({}, { duration: 0.5 });
-
-		ScrollTrigger.refresh();
-	}
-
-	// Re-initialize on resize
-	let resizeTimer;
-	window.addEventListener('resize', () => {
-		clearTimeout(resizeTimer);
-		resizeTimer = setTimeout(() => {
-			initAnimation();
-		}, 250);
-	});
-
-})();*/
-
 
 // Script 3: Carousel Swipe Support
 (function ($) {
@@ -291,7 +190,6 @@
 	});
 
 })(jQuery);
-
 
 // Script 4: Scroll to Top Button
 (function ($) {
@@ -316,7 +214,6 @@
 
 })(jQuery);
 
-
 // Script 5: Fixed Navbar on Scroll
 (function ($) {
     'use strict';
@@ -326,7 +223,11 @@
     var navHeight = $navbar.offset().top;
     var navbarHeight = $navbar.outerHeight();
 
+    // Run immediately, then again after browser restores scroll position on refresh
     FixMegaNavbar(navHeight);
+    $(window).on('load', function () { FixMegaNavbar(navHeight); });
+    setTimeout(function () { FixMegaNavbar(navHeight); }, 100);
+
     $(window).bind('scroll', function () { FixMegaNavbar(navHeight); });
 
     function FixMegaNavbar(navHeight) {
@@ -334,7 +235,6 @@
             if ($(window).scrollTop() > navHeight) {
                 if (!$navbar.hasClass('navbar-fixed-top')) {
                     $navbar.addClass('navbar-fixed-top').addClass('fixed-bg');
-                    // Prevent content jump by compensating for navbar height
                     $body.css('margin-top', navbarHeight + 'px');
                 }
 
@@ -346,7 +246,6 @@
             } else {
                 if ($navbar.hasClass('navbar-fixed-top')) {
                     $navbar.removeClass('navbar-fixed-top').removeClass('fixed-bg');
-                    // Remove compensation only after class is removed
                     $body.css('margin-top', '');
                 }
             }
@@ -355,21 +254,23 @@
 
 })(jQuery);
 
-
 // Script 6: Marquee Animation
 (function () {
 	'use strict';
 
 	document.addEventListener('DOMContentLoaded', function () {
-		// Get your original HTML content
 		const marquee1 = document.getElementById('marquee1');
 
-		if (!marquee1) return; // Exit if element doesn't exist
+		if (!marquee1) return;
 
-		// Get the original text from your HTML
+		// Detect RTL direction from the HTML element or the marquee element itself
+		const isRTL = document.documentElement.getAttribute('dir') === 'rtl' ||
+		              document.documentElement.dir === 'rtl' ||
+		              marquee1.closest('[dir="rtl"]') !== null ||
+		              getComputedStyle(marquee1).direction === 'rtl';
+
 		const originalText1 = marquee1.innerHTML;
 
-		// Function to duplicate text for seamless scrolling
 		function duplicateForMarquee(element, originalHTML, repetitions = 15) {
 			element.innerHTML = '';
 
@@ -380,32 +281,34 @@
 			}
 		}
 
-		// Duplicate the text
 		duplicateForMarquee(marquee1, originalText1, 20);
 
-		// Animation variables
 		let position1 = 0;
 		const speed = 2;
 
-		// Animation function
 		function animateMarquees() {
-			const width1 = marquee1.scrollWidth / 2;
+			const width1 = marquee1.scrollWidth / 20; // width of one repetition
 
-			position1 -= speed;
-			if (position1 <= -width1) {
-				position1 = 0;
+			if (isRTL) {
+				position1 += speed;
+				if (position1 >= width1) {
+					position1 = 0;
+				}
+			} else {
+				position1 -= speed;
+				if (position1 <= -width1) {
+					position1 = 0;
+				}
 			}
-			marquee1.style.transform = `translateX(${position1}px)`;
 
+			marquee1.style.transform = `translateX(${position1}px)`;
 			requestAnimationFrame(animateMarquees);
 		}
 
-		// Start animation
 		animateMarquees();
 	});
 
 })();
-
 
 // Script 7: Video Carousel Controls
 (function () {
@@ -455,7 +358,6 @@
 	});
 
 })();
-
 
 // Script 8: Owl Carousel Initialization
 (function ($) {
@@ -513,7 +415,6 @@
 
 })(jQuery);
 
-
 // Script 9: Accordion Sections
 (function () {
 	'use strict';
@@ -538,541 +439,253 @@
 
 })();
 
-
 // Script 10: Product Filter with Pagination
 (function () {
 	'use strict';
-// Filter with Pagination and Auto Sub-filters with Transitions
-let sortMenu = document.querySelector(".products-menu").children;
-let sortItem = document.querySelector(".products-item").children;
-let itemsPerPage = 9;
-let currentPage = 1;
-let currentFilter = "all";
-let currentSubFilter = "all";
+  document.addEventListener("DOMContentLoaded", function () {
+    // Filter with Pagination and Auto Sub-filters with Transitions
+    let sortMenu = document.querySelector(".products-menu").children;
+    let sortItem = document.querySelector(".products-item").children;
+    if (!sortMenu || !sortItem) return;
+    let itemsPerPage = 9;
+    let currentPage = 1;
+    let currentFilter = "all";
+    let currentSubFilter = "all";
 
-// Automatically extract sub-categories from items
-function getSubCategoriesForFilter(filterValue) {
-  if (filterValue === "all") return [];
-  
-  let subCategories = new Set();
-  
-  for (let i = 0; i < sortItem.length; i++) {
-    let itemCategory = sortItem[i].getAttribute("data-item");
-    let itemSubCategory = sortItem[i].getAttribute("data-sub-item");
-    
-    if (itemCategory === filterValue && itemSubCategory) {
-      subCategories.add(itemSubCategory);
+    // Automatically extract sub-categories from items
+    function getSubCategoriesForFilter(filterValue) {
+      if (filterValue === "all") return [];
+      
+      let subCategories = new Set();
+      
+      for (let i = 0; i < sortItem.length; i++) {
+        let itemCategory = sortItem[i].getAttribute("data-item");
+        let itemSubCategory = sortItem[i].getAttribute("data-sub-item");
+        
+        if (itemCategory === filterValue && itemSubCategory) {
+          subCategories.add(itemSubCategory);
+        }
+      }
+      
+      return Array.from(subCategories).map(sub => ({
+        name: formatSubCategoryName(sub),
+        value: sub
+      }));
     }
-  }
-  
-  return Array.from(subCategories).map(sub => ({
-    name: formatSubCategoryName(sub),
-    value: sub
-  }));
-}
 
-// Format sub-category name for display
-function formatSubCategoryName(value) {
-  return value
-    .split('-')
-    .map(word => word.charAt(0).toUpperCase() + word.slice(1))
-    .join(' ');
-}
+    // Format sub-category name for display
+    function formatSubCategoryName(value) {
+      return value
+        .split('-')
+        .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+        .join(' ');
+    }
 
-// Create pagination container
-function createPaginationControls() {
-  let paginationContainer = document.querySelector(".pagination");
-  if (!paginationContainer) {
-    paginationContainer = document.createElement("div");
-    paginationContainer.className = "pagination";
-    document.querySelector(".products-item").parentNode.appendChild(paginationContainer);
-  }
-  return paginationContainer;
-}
+    // Create pagination container
+    function createPaginationControls() {
+      let paginationContainer = document.querySelector(".filter-pagination");
+      if (!paginationContainer) {
+        paginationContainer = document.createElement("div");
+        paginationContainer.className = "filter-pagination";
+        document.querySelector(".products-item").parentNode.appendChild(paginationContainer);
+      }
+      return paginationContainer;
+    }
 
-// Create sub-filter menu with transition
-function createSubFilterMenu(subCategories) {
-  let subFilterContainer = document.querySelector(".sub-filter-menu");
-  
-  if (!subFilterContainer) {
-    subFilterContainer = document.createElement("div");
-    subFilterContainer.className = "sub-filter-menu";
-    let productsItem = document.querySelector(".products-item");
-    productsItem.parentNode.insertBefore(subFilterContainer, productsItem);
-  }
-  
-  if (!subCategories || subCategories.length === 0) {
-    // Fade out and collapse
-    subFilterContainer.classList.remove("show");
-    subFilterContainer.classList.add("hide");
-    
-    setTimeout(() => {
+    // Create sub-filter menu with transition
+    function createSubFilterMenu(subCategories) {
+      let subFilterContainer = document.querySelector(".sub-filter-menu");
+      
+      if (!subFilterContainer) {
+        subFilterContainer = document.createElement("div");
+        subFilterContainer.className = "sub-filter-menu";
+        let productsItem = document.querySelector(".products-item");
+        productsItem.parentNode.insertBefore(subFilterContainer, productsItem);
+      }
+      
+      if (!subCategories || subCategories.length === 0) {
+        subFilterContainer.classList.remove("show");
+        subFilterContainer.classList.add("hide");
+        
+        setTimeout(() => {
+          subFilterContainer.innerHTML = "";
+        }, 300);
+        return;
+      }
+      
       subFilterContainer.innerHTML = "";
-    }, 300); // Wait for transition to complete
-    return;
-  }
-  
-  // Build the content
-  subFilterContainer.innerHTML = "";
-  
-  // Add "All" button
-  let allBtn = document.createElement("button");
-  allBtn.textContent = "All";
-  allBtn.classList.add("sub-filter-item", "current");
-  allBtn.setAttribute("data-sub-target", "all");
-  allBtn.addEventListener("click", function() {
-    document.querySelectorAll(".sub-filter-item").forEach(btn => {
-      btn.classList.remove("current");
-    });
-    this.classList.add("current");
-    currentSubFilter = "all";
-    currentPage = 1;
-    displayPage(1);
-  });
-  subFilterContainer.appendChild(allBtn);
-  
-  // Add sub-category buttons
-  subCategories.forEach(subCat => {
-    let btn = document.createElement("button");
-    btn.textContent = subCat.name;
-    btn.classList.add("sub-filter-item");
-    btn.setAttribute("data-sub-target", subCat.value);
-    btn.addEventListener("click", function() {
-      document.querySelectorAll(".sub-filter-item").forEach(btn => {
-        btn.classList.remove("current");
+      
+      let allBtn = document.createElement("button");
+      allBtn.textContent = "All";
+      allBtn.classList.add("sub-filter-item", "current");
+      allBtn.setAttribute("data-sub-target", "all");
+      allBtn.addEventListener("click", function() {
+        document.querySelectorAll(".sub-filter-item").forEach(btn => {
+          btn.classList.remove("current");
+        });
+        this.classList.add("current");
+        currentSubFilter = "all";
+        currentPage = 1;
+        displayPage(1);
       });
-      this.classList.add("current");
-      currentSubFilter = this.getAttribute("data-sub-target");
-      currentPage = 1;
-      displayPage(1);
-    });
-    subFilterContainer.appendChild(btn);
-  });
-  
-  // Trigger reflow to ensure transition works
-  subFilterContainer.offsetHeight;
-  
-  // Fade in and expand
-  subFilterContainer.classList.remove("hide");
-  subFilterContainer.classList.add("show");
-}
-
-function getFilteredItems() {
-  let filteredItems = [];
-  for (let i = 0; i < sortItem.length; i++) {
-    let itemCategory = sortItem[i].getAttribute("data-item");
-    let itemSubCategory = sortItem[i].getAttribute("data-sub-item");
-    
-    let matchesMainFilter = (currentFilter == "all" || itemCategory == currentFilter);
-    let matchesSubFilter = (currentSubFilter == "all" || itemSubCategory == currentSubFilter);
-    
-    if (matchesMainFilter && matchesSubFilter) {
-      filteredItems.push(sortItem[i]);
-    }
-  }
-  return filteredItems;
-}
-
-function displayPage(page) {
-  let filteredItems = getFilteredItems();
-  let totalPages = Math.ceil(filteredItems.length / itemsPerPage);
-  
-  currentPage = Math.max(1, Math.min(page, totalPages || 1));
-
-  for (let i = 0; i < sortItem.length; i++) {
-    sortItem[i].classList.remove("active");
-    sortItem[i].classList.add("delete");
-  }
-
-  let start = (currentPage - 1) * itemsPerPage;
-  let end = start + itemsPerPage;
-
-  for (let i = start; i < end && i < filteredItems.length; i++) {
-    filteredItems[i].classList.remove("delete");
-    filteredItems[i].classList.add("active");
-  }
-
-  updatePaginationControls(filteredItems.length);
-}
-
-function updatePaginationControls(totalItems) {
-  let paginationContainer = createPaginationControls();
-  let totalPages = Math.ceil(totalItems / itemsPerPage);
-  
-  paginationContainer.innerHTML = "";
-
-  if (totalPages <= 1) {
-    paginationContainer.style.display = "none";
-    return;
-  }
-  
-  paginationContainer.style.display = "";
-
-  let prevBtn = document.createElement("button");
-  prevBtn.textContent = "Previous";
-  prevBtn.disabled = currentPage === 1;
-  prevBtn.addEventListener("click", () => displayPage(currentPage - 1));
-  paginationContainer.appendChild(prevBtn);
-
-  for (let i = 1; i <= totalPages; i++) {
-    let pageBtn = document.createElement("button");
-    pageBtn.textContent = i;
-    pageBtn.classList.toggle("active", i === currentPage);
-    pageBtn.addEventListener("click", () => displayPage(i));
-    paginationContainer.appendChild(pageBtn);
-  }
-
-  let nextBtn = document.createElement("button");
-  nextBtn.textContent = "Next";
-  nextBtn.disabled = currentPage === totalPages;
-  nextBtn.addEventListener("click", () => displayPage(currentPage + 1));
-  paginationContainer.appendChild(nextBtn);
-}
-
-// Filter menu click handlers
-for (let i = 0; i < sortMenu.length; i++) {
-  sortMenu[i].addEventListener("click", function () {
-    for (let el = 0; el < sortMenu.length; el++) {
-      sortMenu[el].classList.remove("current");
-    }
-    this.classList.add("current");
-
-    currentFilter = this.getAttribute("data-target");
-    currentSubFilter = "all";
-    currentPage = 1;
-    
-    let subCategories = getSubCategoriesForFilter(currentFilter);
-    createSubFilterMenu(subCategories);
-    
-    displayPage(1);
-  });
-}
-
-// Initialize
-displayPage(1);
-
-
-})();
-/* (function () {
-// Filter with Pagination and Auto Sub-filters
-let sortMenu = document.querySelector(".products-menu").children;
-let sortItem = document.querySelector(".products-item").children;
-let itemsPerPage = 9;
-let currentPage = 1;
-let currentFilter = "all";
-let currentSubFilter = "all";
-
-// Automatically extract sub-categories from items
-function getSubCategoriesForFilter(filterValue) {
-  if (filterValue === "all") return [];
-  
-  let subCategories = new Set();
-  
-  for (let i = 0; i < sortItem.length; i++) {
-    let itemCategory = sortItem[i].getAttribute("data-item");
-    let itemSubCategory = sortItem[i].getAttribute("data-sub-item");
-    
-    // If item matches the current filter and has a sub-category
-    if (itemCategory === filterValue && itemSubCategory) {
-      subCategories.add(itemSubCategory);
-    }
-  }
-  
-  // Convert Set to array of objects with name and value
-  return Array.from(subCategories).map(sub => ({
-    name: formatSubCategoryName(sub),
-    value: sub
-  }));
-}
-
-// Format sub-category name for display (e.g., "bread-sub2" -> "Bread Sub2")
-function formatSubCategoryName(value) {
-  return value
-    .split('-')
-    .map(word => word.charAt(0).toUpperCase() + word.slice(1))
-    .join(' ');
-}
-
-// Create pagination container
-function createPaginationControls() {
-  let paginationContainer = document.querySelector(".filter-pagination");
-  if (!paginationContainer) {
-    paginationContainer = document.createElement("div");
-    paginationContainer.className = "filter-pagination";
-    document.querySelector(".products-item").parentNode.appendChild(paginationContainer);
-  }
-  return paginationContainer;
-}
-
-// Create sub-filter menu
-function createSubFilterMenu(subCategories) {
-  let subFilterContainer = document.querySelector(".sub-filter-menu");
-  
-  if (!subFilterContainer) {
-    subFilterContainer = document.createElement("div");
-    subFilterContainer.className = "sub-filter-menu";
-    let productsItem = document.querySelector(".products-item");
-    productsItem.parentNode.insertBefore(subFilterContainer, productsItem);
-  }
-  
-  subFilterContainer.innerHTML = "";
-  
-  if (!subCategories || subCategories.length === 0) {
-    subFilterContainer.style.display = "none";
-    return;
-  }
-  
-  subFilterContainer.style.display = "flex";
-  
-  // Add "All" button
-  let allBtn = document.createElement("button");
-  allBtn.textContent = "All";
-  allBtn.classList.add("sub-filter-item", "current");
-  allBtn.setAttribute("data-sub-target", "all");
-  allBtn.addEventListener("click", function() {
-    document.querySelectorAll(".sub-filter-item").forEach(btn => {
-      btn.classList.remove("current");
-    });
-    this.classList.add("current");
-    currentSubFilter = "all";
-    currentPage = 1;
-    displayPage(1);
-  });
-  subFilterContainer.appendChild(allBtn);
-  
-  // Add sub-category buttons
-  subCategories.forEach(subCat => {
-    let btn = document.createElement("button");
-    btn.textContent = subCat.name;
-    btn.classList.add("sub-filter-item");
-    btn.setAttribute("data-sub-target", subCat.value);
-    btn.addEventListener("click", function() {
-      document.querySelectorAll(".sub-filter-item").forEach(btn => {
-        btn.classList.remove("current");
+      subFilterContainer.appendChild(allBtn);
+      
+      subCategories.forEach(subCat => {
+        let btn = document.createElement("button");
+        btn.textContent = subCat.name;
+        btn.classList.add("sub-filter-item");
+        btn.setAttribute("data-sub-target", subCat.value);
+        btn.addEventListener("click", function() {
+          document.querySelectorAll(".sub-filter-item").forEach(btn => {
+            btn.classList.remove("current");
+          });
+          this.classList.add("current");
+          currentSubFilter = this.getAttribute("data-sub-target");
+          currentPage = 1;
+          displayPage(1);
+        });
+        subFilterContainer.appendChild(btn);
       });
-      this.classList.add("current");
-      currentSubFilter = this.getAttribute("data-sub-target");
-      currentPage = 1;
-      displayPage(1);
-    });
-    subFilterContainer.appendChild(btn);
-  });
-}
-
-function getFilteredItems() {
-  let filteredItems = [];
-  for (let i = 0; i < sortItem.length; i++) {
-    let itemCategory = sortItem[i].getAttribute("data-item");
-    let itemSubCategory = sortItem[i].getAttribute("data-sub-item");
-    
-    // Check main category filter
-    let matchesMainFilter = (currentFilter == "all" || itemCategory == currentFilter);
-    
-    // Check sub-category filter
-    let matchesSubFilter = (currentSubFilter == "all" || itemSubCategory == currentSubFilter);
-    
-    if (matchesMainFilter && matchesSubFilter) {
-      filteredItems.push(sortItem[i]);
+      
+      subFilterContainer.offsetHeight;
+      
+      subFilterContainer.classList.remove("hide");
+      subFilterContainer.classList.add("show");
     }
-  }
-  return filteredItems;
-}
 
-function displayPage(page) {
-  let filteredItems = getFilteredItems();
-  let totalPages = Math.ceil(filteredItems.length / itemsPerPage);
-  
-  currentPage = Math.max(1, Math.min(page, totalPages || 1));
-
-  // Hide all items first
-  for (let i = 0; i < sortItem.length; i++) {
-    sortItem[i].classList.remove("active");
-    sortItem[i].classList.add("delete");
-  }
-
-  // Show items for current page
-  let start = (currentPage - 1) * itemsPerPage;
-  let end = start + itemsPerPage;
-
-  for (let i = start; i < end && i < filteredItems.length; i++) {
-    filteredItems[i].classList.remove("delete");
-    filteredItems[i].classList.add("active");
-  }
-
-  updatePaginationControls(filteredItems.length);
-}
-
-function updatePaginationControls(totalItems) {
-  let paginationContainer = createPaginationControls();
-  let totalPages = Math.ceil(totalItems / itemsPerPage);
-  
-  paginationContainer.innerHTML = "";
-
-  if (totalPages <= 1) {
-    paginationContainer.style.display = "none";
-    return;
-  }
-  
-  paginationContainer.style.display = "";
-
-  // Previous button
-  let prevBtn = document.createElement("button");
-  prevBtn.innerHTML = "<i class='fa-solid fa-chevron-left'></i>";
-  prevBtn.disabled = currentPage === 1;
-  prevBtn.addEventListener("click", () => displayPage(currentPage - 1));
-  paginationContainer.appendChild(prevBtn);
-
-  // Page numbers
-  for (let i = 1; i <= totalPages; i++) {
-    let pageBtn = document.createElement("button");
-    pageBtn.textContent = i;
-    pageBtn.classList.toggle("active", i === currentPage);
-    pageBtn.addEventListener("click", () => displayPage(i));
-    paginationContainer.appendChild(pageBtn);
-  }
-
-  // Next button
-  let nextBtn = document.createElement("button");
-  nextBtn.innerHTML = "<i class='fa-solid fa-chevron-right'></i>";
-  nextBtn.disabled = currentPage === totalPages;
-  nextBtn.addEventListener("click", () => displayPage(currentPage + 1));
-  paginationContainer.appendChild(nextBtn);
-}
-
-// Filter menu click handlers
-for (let i = 0; i < sortMenu.length; i++) {
-  sortMenu[i].addEventListener("click", function () {
-    for (let el = 0; el < sortMenu.length; el++) {
-      sortMenu[el].classList.remove("current");
+    function getFilteredItems() {
+      let filteredItems = [];
+      for (let i = 0; i < sortItem.length; i++) {
+        let itemCategory = sortItem[i].getAttribute("data-item");
+        let itemSubCategory = sortItem[i].getAttribute("data-sub-item");
+        
+        let matchesMainFilter = (currentFilter == "all" || itemCategory == currentFilter);
+        let matchesSubFilter = (currentSubFilter == "all" || itemSubCategory == currentSubFilter);
+        
+        if (matchesMainFilter && matchesSubFilter) {
+          filteredItems.push(sortItem[i]);
+        }
+      }
+      return filteredItems;
     }
-    this.classList.add("current");
 
-    currentFilter = this.getAttribute("data-target");
-    currentSubFilter = "all";
-    currentPage = 1;
-    
-    // Automatically get sub-categories from HTML
-    let subCategories = getSubCategoriesForFilter(currentFilter);
-    createSubFilterMenu(subCategories);
-    
+    function displayPage(page, shouldScroll = false) {
+      if (shouldScroll) {
+        let productsGrid = document.querySelector(".products-item");
+        if (productsGrid) {
+          let offset = 80; // adjust to match your header height in px
+          let top = productsGrid.getBoundingClientRect().top + window.scrollY - offset;
+          window.scrollTo({ top, behavior: "smooth" });
+        }
+      }
+
+      let filteredItems = getFilteredItems();
+      let totalPages = Math.ceil(filteredItems.length / itemsPerPage);
+      currentPage = Math.max(1, Math.min(page, totalPages || 1));
+
+      let start = (currentPage - 1) * itemsPerPage;
+      let end = start + itemsPerPage;
+
+      // Which cards should be visible this page
+      let toShow = new Set();
+      for (let i = start; i < end && i < filteredItems.length; i++) {
+        toShow.add(filteredItems[i]);
+      }
+
+      let toHide = [];
+      for (let i = 0; i < sortItem.length; i++) {
+        if (!toShow.has(sortItem[i])) toHide.push(sortItem[i]);
+      }
+
+      // PHASE 1: fade out content of exiting cards (width stays — no reflow yet)
+      toHide.forEach(card => {
+        card.classList.remove("active", "entering");
+        card.classList.add("exiting");
+      });
+
+      // Pre-position entering cards at correct width but invisible
+      // Grid is already in final layout before any width changes
+      toShow.forEach(card => {
+        card.classList.remove("delete", "exiting", "active");
+        card.classList.add("entering");
+      });
+
+      // PHASE 2: collapse width of exited cards after content has faded (210ms)
+      setTimeout(() => {
+        toHide.forEach(card => {
+          card.classList.remove("exiting");
+          card.classList.add("delete");
+        });
+
+        // PHASE 3: fade in new cards after grid has fully settled (340ms collapse)
+        setTimeout(() => {
+          toShow.forEach(card => {
+            card.classList.remove("entering");
+            card.classList.add("active");
+          });
+          updatePaginationControls(filteredItems.length);
+        }, 340);
+
+      }, 210);
+    }
+
+    function updatePaginationControls(totalItems) {
+      let paginationContainer = createPaginationControls();
+      let totalPages = Math.ceil(totalItems / itemsPerPage);
+      
+      paginationContainer.innerHTML = "";
+
+      if (totalPages <= 1) {
+        paginationContainer.style.display = "none";
+        return;
+      }
+      
+      paginationContainer.style.display = "";
+
+      let prevBtn = document.createElement("button");
+      prevBtn.innerHTML = "<i class='fa-solid fa-chevron-left'></i>";
+      prevBtn.disabled = currentPage === 1;
+      prevBtn.addEventListener("click", () => displayPage(currentPage - 1, true));
+      paginationContainer.appendChild(prevBtn);
+
+      for (let i = 1; i <= totalPages; i++) {
+        let pageBtn = document.createElement("button");
+        pageBtn.textContent = i;
+        pageBtn.classList.toggle("active", i === currentPage);
+        pageBtn.addEventListener("click", () => displayPage(i, true));
+        paginationContainer.appendChild(pageBtn);
+      }
+
+      let nextBtn = document.createElement("button");
+      nextBtn.innerHTML = "<i class='fa-solid fa-chevron-right'></i>";
+      nextBtn.disabled = currentPage === totalPages;
+      nextBtn.addEventListener("click", () => displayPage(currentPage + 1, true));
+      paginationContainer.appendChild(nextBtn);
+    }
+
+    // Filter menu click handlers
+    for (let i = 0; i < sortMenu.length; i++) {
+      sortMenu[i].addEventListener("click", function () {
+        for (let el = 0; el < sortMenu.length; el++) {
+          sortMenu[el].classList.remove("current");
+        }
+        this.classList.add("current");
+
+        currentFilter = this.getAttribute("data-target");
+        currentSubFilter = "all";
+        currentPage = 1;
+        
+        let subCategories = getSubCategoriesForFilter(currentFilter);
+        createSubFilterMenu(subCategories);
+        
+        displayPage(1);
+      });
+    }
+
+    // Initialize
     displayPage(1);
+
   });
-}
-
-// Initialize
-displayPage(1);
-
-})(); */
-
-
-// Script 10: Product Filter with Pagination
-/* (function () {
-	'use strict';
-
-	const productsMenu = document.querySelector(".products-menu");
-	const productsItem = document.querySelector(".products-item");
-
-	if (!productsMenu || !productsItem) return; // Exit if elements don't exist
-
-	let sortMenu = productsMenu.children;
-	let sortItem = productsItem.children;
-	let itemsPerPage = 9;
-	let currentPage = 1;
-	let currentFilter = "all";
-
-	function createPaginationControls() {
-		let paginationContainer = document.querySelector(".filter-pagination");
-		if (!paginationContainer) {
-			paginationContainer = document.createElement("div");
-			paginationContainer.className = "filter-pagination";
-			productsItem.parentNode.appendChild(paginationContainer);
-		}
-		return paginationContainer;
-	}
-
-	function getFilteredItems() {
-		let filteredItems = [];
-		for (let i = 0; i < sortItem.length; i++) {
-			if (
-				sortItem[i].getAttribute("data-item") == currentFilter ||
-				currentFilter == "all"
-			) {
-				filteredItems.push(sortItem[i]);
-			}
-		}
-		return filteredItems;
-	}
-
-	function displayPage(page) {
-		let filteredItems = getFilteredItems();
-		let totalPages = Math.ceil(filteredItems.length / itemsPerPage);
-
-		currentPage = Math.max(1, Math.min(page, totalPages));
-
-		for (let i = 0; i < sortItem.length; i++) {
-			sortItem[i].classList.remove("active");
-			sortItem[i].classList.add("delete");
-		}
-
-		let start = (currentPage - 1) * itemsPerPage;
-		let end = start + itemsPerPage;
-
-		for (let i = start; i < end && i < filteredItems.length; i++) {
-			filteredItems[i].classList.remove("delete");
-			filteredItems[i].classList.add("active");
-		}
-
-		updatePaginationControls(filteredItems.length);
-	}
-
-	function updatePaginationControls(totalItems) {
-		let paginationContainer = createPaginationControls();
-		let totalPages = Math.ceil(totalItems / itemsPerPage);
-
-		paginationContainer.innerHTML = "";
-
-		if (totalPages <= 1) {
-			paginationContainer.style.display = "none";
-			return;
-		}
-
-		paginationContainer.style.display = "flex";
-
-		let prevBtn = document.createElement("button");
-		prevBtn.innerHTML = "<i class='fa-solid fa-chevron-left'></i>";
-		prevBtn.disabled = currentPage === 1;
-		prevBtn.addEventListener("click", () => displayPage(currentPage - 1));
-		paginationContainer.appendChild(prevBtn);
-
-		for (let i = 1; i <= totalPages; i++) {
-			let pageBtn = document.createElement("button");
-			pageBtn.textContent = i;
-			pageBtn.classList.toggle("active", i === currentPage);
-			pageBtn.addEventListener("click", () => displayPage(i));
-			paginationContainer.appendChild(pageBtn);
-		}
-
-		let nextBtn = document.createElement("button");
-		nextBtn.innerHTML = "<i class='fa-solid fa-chevron-right'></i>";
-		nextBtn.disabled = currentPage === totalPages;
-		nextBtn.addEventListener("click", () => displayPage(currentPage + 1));
-		paginationContainer.appendChild(nextBtn);
-	}
-
-	for (let i = 0; i < sortMenu.length; i++) {
-		sortMenu[i].addEventListener("click", function () {
-			for (let el = 0; el < sortMenu.length; el++) {
-				sortMenu[el].classList.remove("current");
-			}
-			this.classList.add("current");
-
-			currentFilter = this.getAttribute("data-target");
-			currentPage = 1;
-			displayPage(1);
-		});
-	}
-
-	displayPage(1);
 
 })();
 
@@ -1181,46 +794,44 @@ displayPage(1);
   document.addEventListener('DOMContentLoaded', () => {
     new VerticalCarousel();
   });
-})(); */
-
+})();
 
 // Script 12: Social Media Dropup Menu
 (function () {
 	'use strict';
 
-document.addEventListener('DOMContentLoaded', function() {
-  const dropupToggles = document.querySelectorAll('.dropup-toggle');
-  
-  dropupToggles.forEach(toggle => {
-    toggle.addEventListener('click', function(e) {
-      e.preventDefault();
-      
-      const dropupMenu = this.nextElementSibling;
-      const parentLi = this.closest('.dropup');
-      
-      // Close other open dropups
-      document.querySelectorAll('.dropup').forEach(item => {
-        if (item !== parentLi) {
-          item.classList.remove('active');
-        }
+  document.addEventListener('DOMContentLoaded', function() {
+    const dropupToggles = document.querySelectorAll('.dropup-toggle');
+    
+    dropupToggles.forEach(toggle => {
+      toggle.addEventListener('click', function(e) {
+        e.preventDefault();
+        
+        const dropupMenu = this.nextElementSibling;
+        const parentLi = this.closest('.dropup');
+        
+        // Close other open dropups
+        document.querySelectorAll('.dropup').forEach(item => {
+          if (item !== parentLi) {
+            item.classList.remove('active');
+          }
+        });
+        
+        // Toggle current dropup
+        parentLi.classList.toggle('active');
       });
-      
-      // Toggle current dropup
-      parentLi.classList.toggle('active');
+    });
+    
+    // Close dropup when clicking outside
+    document.addEventListener('click', function(e) {
+      if (!e.target.closest('.dropup')) {
+        document.querySelectorAll('.dropup').forEach(item => {
+          item.classList.remove('active');
+        });
+      }
     });
   });
-  
-  // Close dropup when clicking outside
-  document.addEventListener('click', function(e) {
-    if (!e.target.closest('.dropup')) {
-      document.querySelectorAll('.dropup').forEach(item => {
-        item.classList.remove('active');
-      });
-    }
-  });
-});
 })();
-
 
 // Script 13: Dropdown Hover
 (function () {
@@ -1239,3 +850,4 @@ document.addEventListener('DOMContentLoaded', function() {
 		}
 	);
 })();
+

@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en">
+<html lang="ar" dir="rtl">
 <head>
   <meta charset="utf-8">
   <title>Domty</title>
@@ -460,6 +460,25 @@
   <script src="https://unpkg.com/gsap@3/dist/ScrollTrigger.min.js"></script>
 
   <script>
+  $(document).ready(function () {
+		$(".products-carousel").owlCarousel({
+			margin: 30,
+			loop: true,
+			rtl: true,
+			dots: false,
+			autoplayHoverPause: true,
+			autoplay: true,
+			nav: true,
+			autoplayTimeout: 2000,
+			navText: ["<i class='fa-solid fa-chevron-right'></i>", "<i class='fa-solid fa-chevron-left'></i>"],
+			responsive: {
+				0: { items: 1 },
+				600: { items: 2 },
+				1000: { items: 2, stagePadding: 120 },
+				1300: { items: 2, stagePadding: 220 }
+			}
+		});
+  });
   </script>
 
 
